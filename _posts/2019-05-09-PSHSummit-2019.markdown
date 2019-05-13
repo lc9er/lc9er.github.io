@@ -10,7 +10,7 @@ categories: powershell
 2019 marks my first time attending the [Powershell + DevOps Global Summit](https://twitter.com/PSHSummit). I first 
 learned of the Summit through the 2018 videos posted on their [YouTube channel](https://www.youtube.com/user/powershellorg). 
 The theme of the year last year seemed to be Pester and Pipeline EVERYTHING, which was perfect timing, as those were the projects
-I was spearheading at the time. The videos gave me ample material to get up and running.  
+I was spearheading. The videos gave me ample material to get these and running.  
 
 Fast forward a year, and I find myself given the opportunity to attend in person. I jumped at the chance, hoping to pick the brains 
 of some of the presenters in person, and get a feel for what other IT shops are doing out in the wild. Here's my brief review.
@@ -25,16 +25,23 @@ of some of the presenters in person, and get a feel for what other IT shops are 
 6. It was a summit by technical people, and for technical people. There was no vendor pressure for sales.
 7. Video and code to review all the sessions I watched, and those I had to miss because of conflicts.
 
-Everyone was really approachable and seemed eager to talk. As much as I enjoyed the presentations, some of my biggest takeaways were from speaking to Glenn and Bradon at the lunch. But the talks were great, too. I walked away with quite a few ideas I'd like to implement over the next few years. Jeffrey Snover was in
-attendance, going to talks, and engaging with anyone and everyone. The social events were a nice way to make sure you got out of you hotel room and interact with your peers in the industry. 
+Everyone was really approachable and seemed eager to talk. As much as I enjoyed the presentations, some of my biggest takeaways were from 
+speaking to Glenn and Brandon at the lunch table. But the talks were great, too. I walked away with quite a few ideas I'd like to implement 
+over the next few years. Jeffrey Snover was in attendance, going to talks, and engaging with anyone and everyone. The social events were 
+a nice way to make sure you got out of your hotel room and interact with your peers in the industry. 
 
-The whole conference had this great vibe of, "Let's learn something, make some connections, improve our skills, and advance our careers while we're at it". If you are wondering why you should attend, rather than watch the videos - it's the stuff that happens in the hallway, the lunch table, and the pub that really makes it worth the price of admission. 
+The whole conference had this great vibe of, "Let's learn something, make some connections, improve our skills, and advance our careers while
+ we're at it". If you are wondering why you should attend, rather than watch the videos - it's the stuff that happens in the hallway, the 
+ lunch table, and the pub that really makes it worth the price of admission. 
 
 ## Cons:
 
 1. The general session format on Monday. I wish they had condensed the general sessions and got right into content. 
 2. Bellevue is kind of lame. 
 
-That's basically it. Every time I had to choose between session running simultaneously, I kept finding myself thinking, "Damn, they could have used this time on Monday". That and wishing I had more time to checkout Seattle. Bellevue seems like one big corporate campus. 
+That's basically it. Every time I had to choose between session running simultaneously, I kept finding myself thinking, "Damn, they could 
+have used this time on Monday". That and wishing I had more time to checkout Seattle. Bellevue seems like one big corporate campus. 
 
-But these are minor quibbles. It was a great experience. I learned a lot about Powershell, what my peers are doing in the field, and a lot about the art of teaching and presenting technical material. That was a huge, unexpected takeaway. The DevOps Collective did a really amazing job organizing the conference and I hope to attend again next year.
+But these are minor quibbles. It was a great experience. I learned a lot about Powershell, what my peers are doing in the field, and about 
+the art of teaching and presenting technical material. That was a huge, unexpected takeaway. The DevOps Collective did a really amazing 
+job organizing the conference and I hope to attend again next year.

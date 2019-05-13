@@ -4,5 +4,4 @@ title: About
 permalink: /about/
 ---
 
-I'm an IT guy from Philly, working the last 15+ years doing Linux and Windows administration. After 12+ years doing primarily Exchange administration, 
-my focus has shifted to automation with Powershell, AD and Office 365/Azure. 
+I'm an IT guy from Philadelphia. I spend most of my time in VSCode, working on automating very old and/or very manual processes.  
