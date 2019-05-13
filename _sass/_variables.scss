@@ -1,20 +1,38 @@
-
 //
 // VARIABLES
 //
 
+$boxShadow: 4px 4px 0 rgba(0,0,0,0.2);
+$dropShadow: drop-shadow(4px 4px 0 rgba(0,0,0,0.2));
+
 // Colors
 $blue: #4183C4;
+$gold: rgb(212, 98, 5);
+$brown: rgb(8, 8, 8);
+$borderColor: #EFE5DA;
+$scrollbarColor: #EFE5DA;
+$linkUnderline: rgba(87, 74, 52, 0.4);
+$tableRowHighlight: #FEFCFB;
+
+// Headings
+$h1Color: #420;
+$h2Color: rgb(212, 98, 5);
+$h3Color: #753;
+$h4Color: #865;
+$headingShadow: rgba(0, 0, 0, 0.15);
 
 // Grays
-$black: #000;
+$black: #111;
 $darkerGray: #222;
 $darkGray: #333;
 $gray: #666;
+$mediumGray: #9a9a9a;
 $lightGray: #eee;
 $white: #fff;
 
 // Font stacks
+$segoeUI: 'Segoe UI', Helvetica, Arial, sans-serif;
+$segoeBold: 'Segoe UI Semibold', Helvetica, Arial, sans-serif;
 $helvetica: Helvetica, Arial, sans-serif;
 $helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $georgia: Georgia, serif;

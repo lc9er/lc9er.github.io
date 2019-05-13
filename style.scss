@@ -17,51 +17,133 @@ html {
   font-size: 100%;
 }
 
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 0.65em;
+  height: 0.65em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $scrollbarColor;
+}
+
 body {
-	background: $white;
-  font: 18px/1.4 $helvetica;
+  background: $white;
+  font-size: 110%;
+  line-height: 1.4;
+  font-family: $segoeUI;
   color: $darkGray;
+
+  -o-transition: 0.25s all;
+  -moz-transition: 0.25s all;
+  -webkit-transition: 0.25s all;
+  transition: 0.25s all;
 }
 
 .container {
   margin: 0 auto;
-  max-width: 740px;
+  max-width: 880px;
   padding: 0 10px;
   width: 100%;
 }
 
+table {
+  background: $white;
+  border: 1px solid $borderColor;
+  font-size: 0.8em;
+  display: block;
+  overflow: auto;
+
+  -moz-box-shadow: $boxShadow;
+  -webkit-box-shadow: $boxShadow;
+  box-shadow: $boxShadow;
+
+  tr:nth-child(even) {
+    background: $tableRowHighlight;
+  }
+
+  td {
+    border: 1px solid $borderColor;
+    padding: 5px;
+    vertical-align: middle;
+
+    code {
+      word-break: break-word;
+      font-size: 1em;
+
+      &.highlighter-rouge {
+        font-weight: normal;
+      }
+    }
+  }
+
+  tr td:first-of-type {
+    border-left-width: 0;
+  }
+
+  tr td:last-of-type {
+    border-right-width: 0;
+  }
+
+  thead {
+    background: $borderColor;
+    font-family: $segoeBold;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: $h3Color;
+
+    th {
+      line-height: 1.8em;
+      border-top-width: 0;
+    }
+  }
+}
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: $helveticaNeue;
-  color: $darkerGray;
+  font-family: $segoeBold;
   font-weight: bold;
 
   line-height: 1.7;
-  margin: 1em 0 15px;
+  margin: 1em 0 0.5em;
   padding: 0;
+  text-shadow: 2px 2px 1px $headingShadow;
 
   @include mobile {
     line-height: 1.4;
   }
+
+  a {
+    text-shadow: none;
+  }
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 1.6em;
+  color: $h1Color;
+  margin-top: 0.5em;
+
   a {
-    color: inherit;
+    color: $brown;
+
+    &:hover {
+      color: $gold;
+    }
   }
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 1.35em;
+  color: $h2Color;
 }
 
 h3 {
-  font-size: 20px;
+  font-size: 1.15em;
+  color: $h3Color;
 }
 
 h4 {
-  font-size: 18px;
-  color: $gray;
+  font-size: 1em;
+  color: $h4Color;
 }
 
 p {
@@ -69,17 +151,34 @@ p {
 }
 
 a {
-  color: $blue;
-  text-decoration: none;
-	cursor: pointer;
+  color: $gold;
+  text-decoration-color: $linkUnderline;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-underline-position: auto;
+  text-decoration-skip-ink: auto;
+  cursor: pointer;
+  //text-shadow: 0 0 2px rgba(0,20,40,0.3);
+  transition: 0.3s all;
+  //box-shadow: 0 0 0 -2px transparent inset;
+
   &:hover, &:active {
-    color: $blue;
+    color: $brown;
+    //text-shadow: 0 -0.025em 2px rgba(0,20,40,0.4);
+    //box-shadow: 0 -0.15em 1px -1px rgba(65,131,196,0.6) inset;
+  }
+
+  code.highlighter-rouge {
+    color: inherit;
+    text-decoration: inherit;
+    text-underline-position: below;
   }
 }
 
 ul, ol {
   margin: 15px 0;
-  padding-left: 30px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }
 
 ul {
@@ -103,11 +202,13 @@ em, i {
 }
 
 strong, b {
+  font-family: $segoeBold;
   font-weight: bold;
 }
 
 img {
   max-width: 100%;
+  display: block;
 }
 
 // Fixes images in popup boxes from Google Translate
@@ -116,6 +217,7 @@ img {
 }
 
 .date {
+  text-align: center;
   font-style: italic;
   color: $gray;
 }
@@ -145,6 +247,16 @@ img {
 /*********************/
 /* LAYOUT / SECTIONS */
 /*********************/
+
+//
+// .adsbygoogle
+//
+
+.adsbygoogle {
+  -webkit-filter: $dropShadow;
+  -ms-filter: $dropShadow;
+  filter: $dropShadow;
+}
 
 //
 // .masthead
@@ -194,16 +306,16 @@ img {
   margin: 0;
   color: $darkGray;
   cursor: pointer;
-  font-family: $helveticaNeue;
+  font-family: $segoeUI;
   font-weight: 300;
-  font-size: 28px;
+  font-size: 1.8em;
   letter-spacing: 1px;
 }
 
 .site-description {
   margin: -5px 0 0 0;
-  color: $gray;
-  font-size: 16px;
+  color: $mediumGray;
+  font-size: 0.85em;
 
   @include mobile {
     margin: 3px 0;
@@ -213,14 +325,14 @@ img {
 nav {
   float: right;
   margin-top: 23px; // @TODO: Vertically middle align
-  font-family: $helveticaNeue;
-  font-size: 18px;
+  font-family: $segoeUI;
+  font-size: 0.95em;
 
   @include mobile {
     float: none;
     margin-top: 9px;
     display: block;
-    font-size: 16px;
+    font-size: 0.8em;
   }
 
   a {
@@ -232,7 +344,7 @@ nav {
 
     @include mobile {
       margin: 0 10px;
-      color: $blue;
+      color: $gold;
     }
   }
 }
@@ -241,14 +353,68 @@ nav {
 // .main
 //
 
+#main {
+  border: 5px solid;
+  border-color: $borderColor;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  margin-bottom: 6em;
+  padding: 0 25px;
+  overflow: auto;
+}
+
+#postTitle {
+  margin-bottom: 10px;
+  border-bottom: 2px solid $borderColor;
+
+  h1 {
+    margin-bottom: 5px;
+    font-size: 2em;
+    text-align: center;
+  }
+}
+
+ul.projectList {
+  list-style-type: none;
+
+  li {
+    &::before {
+      content: '— ';
+    }
+  }
+}
+
+ul.listRecent {
+  list-style-type: none;
+
+  li a {
+    font-style: italic;
+  }
+}
+
 .posts > .post {
   padding-bottom: 2em;
   border-bottom: 1px solid $lightGray;
+
+  &.excerpt {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+  }
+
+  &.list::after {
+    content: ' ';
+    clear: both;
+    display: block;
+  }
 }
 
 .posts > .post:last-child {
   padding-bottom: 1em;
   border-bottom: none;
+}
+
+.posts.homepage > .post > h1 {
+  text-align: center;
 }
 
 .post {
@@ -257,7 +423,21 @@ nav {
     border-left: 2px solid $gray;
     padding: 0.1em 1em;
     color: $gray;
-    font-size: 22px;
+    font-size: 1em;
+    font-style: italic;
+  }
+
+  img {
+    max-width: 95%;
+    margin: 5px auto;
+    -moz-box-shadow: $boxShadow;
+    -webkit-box-shadow: $boxShadow;
+    box-shadow: $boxShadow;
+  }
+
+  .caption {
+    font-size: 0.8em;
+    text-align: center;
     font-style: italic;
   }
 
@@ -267,7 +447,16 @@ nav {
 
   .read-more {
     text-transform: uppercase;
-    font-size: 15px;
+    font-size: 0.9em;
+    float: left;
+  }
+
+  .dateStamp {
+    float: right;
+  }
+
+  .backToIndex {
+    float: right;
   }
 }
 
