@@ -4,6 +4,7 @@ title: "Windows Powershell vs Core: Of Course Core is Faster...But Really?"
 date:   2019-05-13 09:03:37 -0400
 categories: powershell
 tags: powershell, powershell core, pwsh
+image: https://avatars2.githubusercontent.com/u/20189855
 ---
 
 ## Look, Don't Leap
