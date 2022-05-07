@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Windows Powershell vs Core: Of Course Core is Faster...But Really? –  – Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Look, Don’t Leap
+" />
+    <meta property="og:description" content="Look, Don’t Leap
+" />
+    
+    <meta name="author" content="" />
+
+    
+    <meta property="og:title" content="Windows Powershell vs Core: Of Course Core is Faster...But Really?" />
+    <meta property="twitter:title" content="Windows Powershell vs Core: Of Course Core is Faster...But Really?" />
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Windows Powershell vs Core: Of Course Core is Faster…But Really? | Your awesome title</title>
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="Windows Powershell vs Core: Of Course Core is Faster…But Really?" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Look, Don’t Leap" />
+<meta property="og:description" content="Look, Don’t Leap" />
+<link rel="canonical" href="http://localhost:4000/powershell/2019/05/13/P51-vs-P62-Performance.html" />
+<meta property="og:url" content="http://localhost:4000/powershell/2019/05/13/P51-vs-P62-Performance.html" />
+<meta property="og:site_name" content="Your awesome title" />
+<meta property="og:image" content="https://avatars2.githubusercontent.com/u/20189855" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-13T09:03:37-04:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://avatars2.githubusercontent.com/u/20189855" />
+<meta property="twitter:title" content="Windows Powershell vs Core: Of Course Core is Faster…But Really?" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-05-13T09:03:37-04:00","datePublished":"2019-05-13T09:03:37-04:00","description":"Look, Don’t Leap","headline":"Windows Powershell vs Core: Of Course Core is Faster…But Really?","image":"https://avatars2.githubusercontent.com/u/20189855","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/powershell/2019/05/13/P51-vs-P62-Performance.html"},"url":"http://localhost:4000/powershell/2019/05/13/P51-vs-P62-Performance.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title=" - Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description." href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/"></a></h1>
+            <p class="site-description">Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Windows Powershell vs Core: Of Course Core is Faster...But Really?</h1>
+
+  <div class="entry">
+    <h2 id="look-dont-leap">Look, Don’t Leap</h2>
+
+<p>When Powershell Core first came out, the AD module was not supported. That’s non-starter for me, 
+so I hadn’t really done anything with it. After attending <a href="https://twitter.com/hashtag/PSHSummit?src=hash">PSHSummit 2019</a>,
+I decided to give it another look, and was really surprised at how much faster it turned out to be in certain circumstances.</p>
+
+<h2 id="the-showdown">The Showdown</h2>
+
+<p>I recently had to audit some Exchange settings, to the tune of ~70,000 mailboxes. I have a job that pulls down a list of all
+the mailboxes, with attributes I use across a number of jobs. The report I had to write concerned several mailbox attributes, but 
+for the sake of simplicity, let’s create a csv file with two fields, “UserID” and “Policy”.</p>
+
+<h3 id="generate">Generate</h3>
+
+<p>Let’s make our source data file.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">69999</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kr">Foreach</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="err">`</span><span class="w">
+    </span><span class="nv">$i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"{0:00000}"</span><span class="w"> </span><span class="nt">-f</span><span class="w"> </span><span class="bp">$_</span><span class="w">          </span><span class="err">`</span><span class="w">  
+    </span><span class="p">[</span><span class="n">pscustomobject</span><span class="p">]@{</span><span class="w">              </span><span class="err">`</span><span class="w">
+        </span><span class="nx">UserId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"User_</span><span class="nv">$i</span><span class="s2">"</span><span class="w">          </span><span class="err">`</span><span class="w">
+        </span><span class="nx">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Default'</span><span class="w">          </span><span class="err">`</span><span class="w">
+    </span><span class="p">}</span><span class="w">                               </span><span class="err">`</span><span class="w">    
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c"># Let's change some values</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="p">[</span><span class="mi">20001</span><span class="p">]</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SuperSecure'</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="p">[</span><span class="mi">10001</span><span class="p">]</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SuperSecure'</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="p">[</span><span class="mi">35001</span><span class="p">]</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SuperSecure'</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="p">[</span><span class="mi">19001</span><span class="p">]</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="p">[</span><span class="mi">59999</span><span class="p">]</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="p">[</span><span class="mi">69999</span><span class="p">]</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="w">
+
+</span><span class="c"># ...and write to file.</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">export-csv</span><span class="w"> </span><span class="nx">users.csv</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="testing-it-out">Testing it out</h3>
+
+<p>Sweet. Now say we need to find anyone with a ‘LooseyGoosey’ policy, so we can revisit that policy decision 
+or take action on the mailbox.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Powershell 5.1</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">import-csv</span><span class="w"> </span><span class="nx">users.csv</span><span class="w">
+
+</span><span class="c"># First, using the .Where Method</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Measure-Command</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">$users</span><span class="o">.</span><span class="nf">Where</span><span class="p">(</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="p">}</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+</span><span class="n">Days</span><span class="w">              </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Hours</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Minutes</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">2</span><span class="w">
+</span><span class="n">Seconds</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">2</span><span class="w">
+</span><span class="n">Milliseconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">159</span><span class="w">
+</span><span class="n">Ticks</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">1221594732</span><span class="w">
+</span><span class="n">TotalDays</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="nx">0.00141388279166667</span><span class="w">
+</span><span class="n">TotalHours</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="nx">0.033933187</span><span class="w">
+</span><span class="n">TotalMinutes</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">2.03599122</span><span class="w">
+</span><span class="n">TotalSeconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">122.1594732</span><span class="w">
+</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">122159.4732</span><span class="w">
+
+</span><span class="c"># Now, let's try piping this business</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Measure-Command</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">$users</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="bp">$_</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+</span><span class="n">Days</span><span class="w">              </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Hours</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Minutes</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">2</span><span class="w">
+</span><span class="n">Seconds</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">4</span><span class="w">
+</span><span class="n">Milliseconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">942</span><span class="w">
+</span><span class="n">Ticks</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">1249421529</span><span class="w">
+</span><span class="n">TotalDays</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="nx">0.00144608973263889</span><span class="w">
+</span><span class="n">TotalHours</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="nx">0.0347061535833333</span><span class="w">
+</span><span class="n">TotalMinutes</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">2.082369215</span><span class="w">
+</span><span class="n">TotalSeconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">124.9421529</span><span class="w">
+</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">124942.1529</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Oof… 2+ minutes. Let’s do this in Core (6.2)</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Powershell 6.2</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">import-csv</span><span class="w"> </span><span class="nx">users.csv</span><span class="w">
+
+</span><span class="c"># .Where Method</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Measure-Command</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">$users</span><span class="o">.</span><span class="nf">Where</span><span class="p">(</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="p">}</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+</span><span class="n">Days</span><span class="w">              </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Hours</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Minutes</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Seconds</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Milliseconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">804</span><span class="w">
+</span><span class="n">Ticks</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">8041803</span><span class="w">
+</span><span class="n">TotalDays</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="nx">9.30764236111111E-06</span><span class="w">
+</span><span class="n">TotalHours</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="nx">0.000223383416666667</span><span class="w">
+</span><span class="n">TotalMinutes</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">0.013403005</span><span class="w">
+</span><span class="n">TotalSeconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">0.8041803</span><span class="w">
+</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">804.1803</span><span class="w">
+
+</span><span class="c"># Now with pipes</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Measure-Command</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">$users</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Policy</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="s1">'LooseyGoosey'</span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+    
+</span><span class="n">Days</span><span class="w">              </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Hours</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Minutes</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">Seconds</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span><span class="n">Milliseconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">730</span><span class="w">
+</span><span class="n">Ticks</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nx">17307062</span><span class="w">
+</span><span class="n">TotalDays</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="nx">2.00313217592593E-05</span><span class="w">
+</span><span class="n">TotalHours</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="nx">0.000480751722222222</span><span class="w">
+</span><span class="n">TotalMinutes</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">0.0288451033333333</span><span class="w">
+</span><span class="n">TotalSeconds</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">1.7307062</span><span class="w">
+</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">1730.7062</span><span class="w">
+
+</span></code></pre></div></div>
+
+<p>2 minutes down to ~1 second. Pretty crazy. The original script I wrote was more complex, making use of a couple 
+of data sources and checking against multiple conditions. Executing the script with pwsh took the runtime from ~11 
+minutes, down to about 12 seconds, without changing any code. Now I’m looking at swapping in Powershell Core on a
+number of data crunching jobs.</p>
+
+  </div>
+
+  <div class="date">
+    Written on May 13, 2019
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
